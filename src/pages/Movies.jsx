@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Spinner } from 'components/Spinner';
+import { getMoviesBySearchQuery } from 'services/moviesApi';
 
-const API_KEY = 'fadee9dfff8cb6b1bff36771479589d6';
-
-export function Movies() {
+export default function Movies() {
   const [query, setQuery] = useState('');
   const [movies, setMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
 
@@ -15,18 +17,32 @@ export function Movies() {
 
   useEffect(() => {
     if (query) {
-      fetch(
-        `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}`
-      )
-        .then(r => r.json())
-        .then(({ results }) => setMovies(results));
+      setIsLoading(true);
+      getMoviesBySearchQuery(query)
+        .then(({ results }) => {
+          if (results.length === 0) {
+            toast.error(`We didn't find anything! Please, check your request!`);
+            return;
+          }
+
+          setSearchParams({ query });
+          setMovies(results);
+        })
+        .finally(() => setIsLoading(false));
     }
-  }, [query]);
+  }, [query, setSearchParams]);
 
   const handleSubmit = e => {
     e.preventDefault();
-    setQuery(e.currentTarget.elements.query.value);
-    setSearchParams({ query: e.currentTarget.elements.query.value });
+    const query = e.currentTarget.elements.query.value.trim();
+
+    if (query === '') {
+      toast.warn('Your request is empty! Enter something!');
+      e.currentTarget.reset();
+      return;
+    }
+
+    setQuery(query);
     e.currentTarget.reset();
   };
 
@@ -36,24 +52,30 @@ export function Movies() {
         <input
           type="text"
           name="query"
-          placeholder="Enter the movie's title"
+          placeholder="Enter the search request"
           autoComplete="off"
         />
-        <button type="submit">Search</button>
+        <button type="submit" disabled={isLoading}>
+          Search
+        </button>
       </form>
 
-      <ul>
-        {movies.length !== 0 &&
-          movies.map(({ id, title }) => {
-            return (
-              <li key={id}>
-                <Link to={`/movies/${id}`} state={{ from: location }}>
-                  {title}
-                </Link>
-              </li>
-            );
-          })}
-      </ul>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <ul>
+          {movies.length !== 0 &&
+            movies.map(({ id, title }) => {
+              return (
+                <li key={id}>
+                  <Link to={`/movies/${id}`} state={{ from: location }}>
+                    {title}
+                  </Link>
+                </li>
+              );
+            })}
+        </ul>
+      )}
     </>
   );
 }

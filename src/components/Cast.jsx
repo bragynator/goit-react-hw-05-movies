@@ -1,28 +1,32 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { getMovieCast } from 'services/moviesApi';
+import { CastItem } from './CastItem';
 
-const API_KEY = 'fadee9dfff8cb6b1bff36771479589d6';
-
-export function Cast() {
+export default function Cast() {
   const { movieId } = useParams();
   const [movieCast, setMovieCast] = useState([]);
 
   useEffect(() => {
-    fetch(
-      `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}`
-    )
-      .then(r => r.json())
-      .then(({ cast }) => setMovieCast(cast));
+    getMovieCast(movieId).then(({ cast }) => setMovieCast(cast));
   }, [movieId]);
 
   return (
-    <div>
-      <h4>Cast</h4>
-      <ul>
-        {movieCast.map(({ name }) => (
-          <li>{name}</li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <h3>Cast</h3>
+      {movieCast.length !== 0 ? (
+        <ul>
+          {movieCast
+            .filter(({ popularity, profile_path }, idx, arr) =>
+              arr.length > 15 ? popularity > 5 : profile_path
+            )
+            .map(movieCastItem => (
+              <CastItem key={movieCastItem.credit_id} data={movieCastItem} />
+            ))}
+        </ul>
+      ) : (
+        <p>We don't have any info about its cast, sorry!</p>
+      )}
+    </>
   );
 }
