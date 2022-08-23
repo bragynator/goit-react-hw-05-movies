@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Spinner } from 'components/Spinner';
+import { Spinner } from 'components/Spinner/Spinner';
 import { getMoviesBySearchQuery } from 'services/moviesApi';
+import styles from './Movies.module.css';
 
 export default function Movies() {
   const [query, setQuery] = useState('');
@@ -55,7 +56,11 @@ export default function Movies() {
           placeholder="Enter the search request"
           autoComplete="off"
         />
-        <button type="submit" disabled={isLoading}>
+        <button
+          type="submit"
+          disabled={isLoading}
+          className={styles.searchButton}
+        >
           Search
         </button>
       </form>

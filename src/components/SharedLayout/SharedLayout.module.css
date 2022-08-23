@@ -1,0 +1,22 @@
+.header {
+  margin-top: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 30px;
+}
+
+.navLink {
+  padding: 10px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+.navLink + .navLink {
+  margin-left: 5px;
+}
+
+.activeNavLink {
+  composes: navLink;
+  color: orange;
+  background-color: #fff;
+}

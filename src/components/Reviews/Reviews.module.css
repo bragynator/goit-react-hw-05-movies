@@ -1,0 +1,11 @@
+.reviewsList {
+  padding-left: 20px;
+}
+
+.reviewsList > li {
+  margin-bottom: 10px;
+}
+
+.reviewsList > li > h4 {
+  margin-bottom: 5px;
+}

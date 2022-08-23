@@ -1,0 +1,9 @@
+.searchButton {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.searchButton:hover,
+.searchButton:focus {
+  color: orange;
+}

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getMovieCast } from 'services/moviesApi';
-import { CastItem } from './CastItem';
+import { CastItem } from '../Castitem/CastItem';
+import styles from './Cast.module.css';
 
 export default function Cast() {
   const { movieId } = useParams();
@@ -15,7 +16,7 @@ export default function Cast() {
     <>
       <h3>Cast</h3>
       {movieCast.length !== 0 ? (
-        <ul>
+        <ul className={styles.castList}>
           {movieCast
             .filter(({ popularity, profile_path }, idx, arr) =>
               arr.length > 15 ? popularity > 5 : profile_path

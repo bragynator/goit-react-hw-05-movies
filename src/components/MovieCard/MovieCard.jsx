@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import styles from './MovieCard.module.css';
 
 export function MovieCard({ movie }) {
   const { title, poster_path, overview, tagline, vote_average, release_date } =
@@ -8,15 +9,19 @@ export function MovieCard({ movie }) {
 
   return (
     <>
-      <h2>{title}</h2>
-      <img
-        src={`https://image.tmdb.org/t/p/w400/${poster_path}`}
-        alt={tagline && title}
-      />
-      <p>Year: {releaseYear}</p>
-      <p>User score: {userScore}%</p>
-      <p>OVERVIEW</p>
-      {overview && <p>{overview}</p>}
+      <h2 className={styles.title}>{title}</h2>
+      <div className={styles.wrapper}>
+        <img
+          src={`https://image.tmdb.org/t/p/w300/${poster_path}`}
+          alt={tagline && title}
+        />
+        <div className={styles.infoWrapper}>
+          <p>Year: {releaseYear}</p>
+          <p>User score: {userScore}%</p>
+          <p>OVERVIEW:</p>
+          <p>{overview}</p>
+        </div>
+      </div>
     </>
   );
 }

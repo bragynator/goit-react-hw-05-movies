@@ -1,0 +1,22 @@
+.backLink {
+  padding-left: 20px;
+  padding-right: 20px;
+  border: 1px solid grey;
+  border-radius: 5px;
+}
+
+.addInfoList {
+  margin: 0;
+  list-style: none;
+  padding: 10px;
+  display: flex;
+  font-size: large;
+}
+
+.addInfoList li {
+  border-bottom: 2px solid grey;
+}
+
+.addInfoList li:not(:last-child) {
+  margin-right: 15px;
+}

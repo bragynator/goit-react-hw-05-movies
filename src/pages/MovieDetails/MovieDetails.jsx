@@ -1,8 +1,9 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useParams, Outlet, Link, useLocation } from 'react-router-dom';
 import { getMovieById } from 'services/moviesApi';
-import { MovieCard } from 'components/MovieCard';
-import { Spinner } from 'components/Spinner';
+import { MovieCard } from 'components/MovieCard/MovieCard';
+import { Spinner } from 'components/Spinner/Spinner';
+import styles from './MovieDetails.module.css';
 
 export default function MovieDetails() {
   const { movieId } = useParams();
@@ -16,12 +17,14 @@ export default function MovieDetails() {
 
   return (
     <>
-      <Link to={backLinkHref}>Back</Link>
+      <Link to={backLinkHref} className={styles.backLink}>
+        Back
+      </Link>
       {Object.keys(movie).length !== 0 && (
         <>
           <MovieCard movie={movie} />
-          <p>Additional Information</p>
-          <ul>
+          <h4>Additional Information</h4>
+          <ul className={styles.addInfoList}>
             <li>
               <Link to="cast" state={{ from: backLinkHref }}>
                 Cast
@@ -35,7 +38,6 @@ export default function MovieDetails() {
           </ul>
         </>
       )}
-
       <Suspense fallback={<Spinner />}>
         <Outlet />
       </Suspense>
